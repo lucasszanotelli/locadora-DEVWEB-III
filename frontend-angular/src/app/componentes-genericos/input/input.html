@@ -1,0 +1,1 @@
+<div class="field"><label>{{label}} @if(required){<span>*</span>}</label><input [type]="type" [placeholder]="placeholder" [value]="value" [min]="min ?? null" [class.invalid]="erro" (input)="valueChange.emit($any($event.target).value)" />@if(erro){<small>{{erro}}</small>}</div>

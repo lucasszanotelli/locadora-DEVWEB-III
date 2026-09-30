@@ -1,0 +1,10 @@
+aside { position: fixed; inset: 0 auto 0 0; width: 260px; padding: 28px 18px 18px; background: #111b2e; color: #c6d0df; display: flex; flex-direction: column; z-index: 20; box-sizing: border-box; }
+.brand { display:flex; align-items:center; gap:12px; color:white; text-decoration:none; padding:0 10px 27px; }
+.brand-mark { display:grid; place-items:center; width:39px; height:39px; border-radius:12px; background:#f15b40; font-size:15px; }
+.brand strong,.brand small { display:block; } .brand strong { font: 700 19px/1.1 Georgia,serif; letter-spacing:.2px; } .brand small { color:#8290a4; font-size:10px; letter-spacing:1.8px; text-transform:uppercase; margin-top:3px; }
+nav { overflow:auto; flex:1; } .nav-label { display:block; color:#647187; font-size:10px; letter-spacing:1.4px; font-weight:700; margin:19px 12px 8px; }
+nav a { display:flex; align-items:center; gap:12px; min-height:43px; padding:0 13px; color:#aeb9c9; text-decoration:none; border-radius:9px; font-size:14px; margin:2px 0; transition:.18s; }
+nav a:hover { color:white; background:#17243a; } nav a.active { color:white; background:#20314c; box-shadow: inset 3px 0 #f15b40; } nav i { width:19px; text-align:center; font-style:normal; font-size:18px; }
+.employee { display:flex; gap:10px; align-items:center; border-top:1px solid #243047; padding:18px 7px 0; margin-top:10px; } .employee>span { width:35px; height:35px; display:grid; place-items:center; border-radius:50%; background:#f15b40; color:white; font-size:12px; font-weight:700; } .employee div { flex:1; } .employee strong,.employee small { display:block; } .employee strong { color:white; font-size:12px; } .employee small { color:#7f8da1; font-size:11px; margin-top:3px; }
+.mobile-menu { display:none; position:fixed; z-index:30; top:18px; left:18px; border:0; border-radius:8px; background:#111b2e; color:white; width:44px; height:44px; font-size:20px; }.backdrop{display:none}
+@media(max-width:900px){ aside{transform:translateX(-102%);transition:.2s} aside.open{transform:none}.mobile-menu{display:block}.backdrop{display:block;position:fixed;inset:0;border:0;background:#0c142099;z-index:15} }
