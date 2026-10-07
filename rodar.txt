@@ -1,0 +1,5 @@
+cd backend/demo
+bash mvnw spring-boot:run -Djava.version=21
+
+cd frontend-angular
+npm start
