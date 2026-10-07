@@ -1,0 +1,28 @@
+<app-cabecalho-pagina titulo="Atores" subtitulo="Cadastre e gerencie os atores do acervo.">
+  <app-botao icone="＋" [desabilitado]="processando || carregando" (acionado)="novo()">Novo Ator</app-botao>
+</app-cabecalho-pagina>
+@if (erro) { <p class="error" role="alert">{{erro}}</p><app-botao tipo="secundario" [desabilitado]="processando || carregando" (acionado)="carregar()">Atualizar lista</app-botao> }
+<section class="card">
+  <div class="toolbar"><div class="search">⌕<input placeholder="Buscar por nome..." [(ngModel)]="busca"></div><span>{{lista.length}} registros</span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Nome</th><th>Nacionalidade</th><th>Data de nascimento</th><th class="actions">Ações</th></tr></thead>
+    <tbody>
+      @if (carregando) { <tr><td colspan="4" class="empty">Carregando atores...</td></tr> }
+      @else {
+        @for (ator of lista; track ator.id) {
+          <tr><td><strong>{{ator.nome}}</strong></td><td>{{ator.nacionalidade || '—'}}</td><td>{{ator.dataNascimento ? (ator.dataNascimento | date:'dd/MM/yyyy') : '—'}}</td>
+            <td class="actions"><app-botao tipo="icone" icone="✎" [desabilitado]="processando" (acionado)="editar(ator)"/><app-botao tipo="icone" icone="⌫" [desabilitado]="processando" (acionado)="excluir(ator)"/></td></tr>
+        } @empty { <tr><td colspan="4" class="empty">Nenhum ator encontrado.</td></tr> }
+      }
+    </tbody>
+  </table></div>
+</section>
+<app-modal [aberto]="modal" [titulo]="item.id ? 'Editar Ator' : 'Novo Ator'" (fechar)="fechar()">
+  <div class="form-grid">
+    <app-input class="full" label="Nome" [required]="true" [value]="item.nome" (valueChange)="item.nome=$event" placeholder="Informe o nome"/>
+    <app-input label="Nacionalidade" [value]="item.nacionalidade" (valueChange)="item.nacionalidade=$event"/>
+    <app-input label="Data de nascimento" type="date" [value]="item.dataNascimento" (valueChange)="item.dataNascimento=$event"/>
+    @if (erroFormulario) { <p class="error full" role="alert">{{erroFormulario}}</p> }
+    <div class="modal-actions full"><app-botao tipo="secundario" [desabilitado]="processando" (acionado)="fechar()">Cancelar</app-botao><app-botao [desabilitado]="processando" (acionado)="salvar()">{{processando ? 'Salvando...' : 'Salvar'}}</app-botao></div>
+  </div>
+</app-modal>

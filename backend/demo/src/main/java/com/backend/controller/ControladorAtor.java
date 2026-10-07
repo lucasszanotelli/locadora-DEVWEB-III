@@ -1,46 +1,46 @@
 package com.backend.controller;
 
 import java.net.URI;
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.backend.model.domain.Ator;
 import com.backend.model.service.ServAtor;
 
 @RestController
 @RequestMapping("/atores")
 public class ControladorAtor {
-
     private final ServAtor servAtor;
 
     public ControladorAtor(ServAtor servAtor) {
         this.servAtor = servAtor;
     }
 
+    @GetMapping
+    public List<Ator> listar() {
+        return servAtor.listarTodos();
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
-        Optional<Ator> ator = servAtor.buscarPorId(id);
-
-        if (ator.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("não encontrado");
-        }
-
-        return ResponseEntity.ok(ator.get());
+    public ResponseEntity<Ator> buscarPorId(@PathVariable Integer id) {
+        return ResponseEntity.of(servAtor.buscarPorId(id));
     }
 
     @PostMapping
     public ResponseEntity<Ator> inserir(@RequestBody Ator ator) {
-        Ator atorSalvo = servAtor.salvar(ator);
-        URI localizacao = URI.create("/atores/" + atorSalvo.getId());
+        ator.setId(null);
+        Ator salvo = servAtor.salvar(ator);
+        return ResponseEntity.created(URI.create("/atores/" + salvo.getId())).body(salvo);
+    }
 
-        return ResponseEntity.created(localizacao).body(atorSalvo);
+    @PutMapping("/{id}")
+    public ResponseEntity<Ator> atualizar(@PathVariable Integer id, @RequestBody Ator ator) {
+        return ResponseEntity.of(servAtor.atualizar(id, ator));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+        return servAtor.excluir(id) ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

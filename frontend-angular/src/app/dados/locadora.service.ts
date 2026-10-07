@@ -9,7 +9,7 @@ export interface Locacao { id:number; item:string; serie:string; cliente:string;
 
 @Injectable({providedIn:'root'})
 export class LocadoraService {
-  atores = signal<PessoaSimples[]>([{id:1,nome:'Tom Hanks',vinculado:true},{id:2,nome:'Viola Davis',vinculado:true},{id:3,nome:'Cillian Murphy',vinculado:true},{id:4,nome:'Emma Stone'}]);
+  atores = signal<PessoaSimples[]>([]);
   diretores = signal<PessoaSimples[]>([{id:1,nome:'Christopher Nolan',vinculado:true},{id:2,nome:'Greta Gerwig',vinculado:true},{id:3,nome:'Steven Spielberg'}]);
   classes = signal<Classe[]>([{id:1,nome:'Lançamento',valor:12.9,prazo:2,vinculado:true},{id:2,nome:'Catálogo',valor:8.5,prazo:3,vinculado:true},{id:3,nome:'Clássico',valor:6,prazo:5}]);
   titulos = signal<Titulo[]>([
