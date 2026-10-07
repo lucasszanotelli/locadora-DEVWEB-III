@@ -1,4 +1,5 @@
 import { Atores } from './paginas/atores/atores';
+import { Diretores } from './paginas/diretores/diretores';
 import { Routes } from '@angular/router';
 import { Inicio } from './paginas/inicio/inicio';
 import { CadastroSimples } from './paginas/cadastro-simples/cadastro-simples';
@@ -15,7 +16,7 @@ export const routes: Routes = [
   {path:'titulos',component:Titulos},
   {path:'itens',component:Itens},
   {path:'atores',component:Atores},
-  {path:'diretores',component:CadastroSimples,data:{tipo:'diretores',titulo:'Diretores'}},
+  {path:'diretores',component:Diretores},
   {path:'classes',component:CadastroSimples,data:{tipo:'classes',titulo:'Classes'}},
   {path:'clientes',component:Clientes},
   {path:'locacoes',component:Locacoes},

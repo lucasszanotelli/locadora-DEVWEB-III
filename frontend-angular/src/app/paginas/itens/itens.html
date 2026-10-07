@@ -1,1 +1,47 @@
-<app-cabecalho-pagina titulo="Itens" subtitulo="Controle os exemplares físicos: fitas, DVDs e Blu-rays."><app-botao icone="＋" (acionado)="novo()">Novo item</app-botao></app-cabecalho-pagina><section class="card"><div class="toolbar"><div class="search">⌕<input [(ngModel)]="busca" placeholder="Buscar por série, título ou tipo..."></div><span>{{lista.length}} itens</span></div><div class="table-wrap"><table><thead><tr><th>Nº de série</th><th>Título</th><th>Tipo</th><th>Aquisição</th><th>Status</th><th class="actions">Ações</th></tr></thead><tbody>@for(x of lista;track x.id){<tr><td><strong>{{x.serie}}</strong></td><td>{{x.titulo}}</td><td>{{x.tipo}}</td><td>{{x.aquisicao|date:'dd/MM/yyyy'}}</td><td><app-status [texto]="x.status" [tipo]="x.status==='Disponível'?'sucesso':x.status==='Locado'?'alerta':'neutro'"/></td><td class="actions"><app-botao tipo="icone" icone="✎" (acionado)="editar(x)"/><app-botao tipo="icone" icone="⌫" (acionado)="excluir(x)"/></td></tr>}</tbody></table></div></section><app-modal [aberto]="modal" [titulo]="item.id?'Editar item':'Novo item'" (fechar)="modal=false"><div class="form-grid"><label>Número de série *<input [(ngModel)]="item.serie" placeholder="DVD-2026-001"></label><label>Título *<select [(ngModel)]="item.titulo"><option value="">Selecione</option>@for(x of dados.titulos();track x.id){<option>{{x.nome}}</option>}</select></label><label>Data de aquisição *<input type="date" [(ngModel)]="item.aquisicao"></label><label>Tipo *<select [(ngModel)]="item.tipo"><option>Fita</option><option>DVD</option><option>Blu-ray</option></select></label><label>Status<select [(ngModel)]="item.status"><option>Disponível</option><option>Locado</option><option>Manutenção</option></select></label>@if(erro){<p class="error full">{{erro}}</p>}<div class="modal-actions full"><app-botao tipo="secundario" (acionado)="modal=false">Cancelar</app-botao><app-botao (acionado)="salvar()">Salvar item</app-botao></div></div></app-modal>
+﻿<app-cabecalho-pagina titulo="Itens" subtitulo="Controle os exemplares físicos: fitas, DVDs e Blu-rays.">
+  <app-botao icone="＋" [desabilitado]="processando || carregando" (acionado)="novo()">Novo item</app-botao>
+</app-cabecalho-pagina>
+@if (erro) { <p class="error" role="alert">{{erro}}</p> }
+<section class="card">
+  <div class="toolbar">
+    <div class="search">⌕<input [(ngModel)]="busca" placeholder="Buscar por série, título ou tipo..."></div>
+    <span>{{lista.length}} itens</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Nº de série</th><th>Título</th><th>Tipo</th><th>Aquisição</th><th>Status</th><th class="actions">Ações</th></tr></thead>
+      <tbody>
+        @if (carregando) { <tr><td colspan="6" class="empty">Carregando itens...</td></tr> }
+        @else {
+          @for (x of lista; track x.id) {
+            <tr>
+              <td><strong>{{x.serie}}</strong></td><td>{{x.titulo}}</td><td>{{x.tipo}}</td><td>{{x.aquisicao | date:'dd/MM/yyyy'}}</td>
+              <td><app-status [texto]="x.status" [tipo]="x.status === 'Disponível' ? 'sucesso' : x.status === 'Locado' ? 'alerta' : 'neutro'" /></td>
+              <td class="actions">
+                <app-botao tipo="icone" icone="✎" [desabilitado]="processando" (acionado)="editar(x)" />
+                <app-botao tipo="icone" icone="⌫" [desabilitado]="processando" (acionado)="excluir(x)" />
+              </td>
+            </tr>
+          } @empty { <tr><td colspan="6" class="empty">Nenhum item cadastrado.</td></tr> }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+<app-modal [aberto]="modal" [titulo]="item.id ? 'Editar item' : 'Novo item'" (fechar)="fechar()">
+  <div class="form-grid">
+    <label>Número de série *<input [(ngModel)]="item.serie" placeholder="DVD-2026-001"></label>
+    <label>Título *<select [(ngModel)]="item.titulo">
+      <option value="">Selecione um título cadastrado</option>
+      @for (x of dados.titulos(); track x.id) { <option [value]="x.nome">{{x.nome}}</option> }
+    </select></label>
+    <label>Data de aquisição *<input type="date" [(ngModel)]="item.aquisicao"></label>
+    <label>Tipo *<select [(ngModel)]="item.tipo"><option>Fita</option><option>DVD</option><option>Blu-ray</option></select></label>
+    <label>Status<select [(ngModel)]="item.status"><option>Disponível</option><option>Locado</option><option>Manutenção</option></select></label>
+    @if (erro) { <p class="error full" role="alert">{{erro}}</p> }
+    <div class="modal-actions full">
+      <app-botao tipo="secundario" [desabilitado]="processando" (acionado)="fechar()">Cancelar</app-botao>
+      <app-botao [desabilitado]="processando" (acionado)="salvar()">{{processando ? 'Salvando...' : 'Salvar item'}}</app-botao>
+    </div>
+  </div>
+</app-modal>

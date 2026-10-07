@@ -1,1 +1,8 @@
-@if(aberto){<div class="overlay" (mousedown)="fechar.emit()"><section (mousedown)="$event.stopPropagation()" [style.max-width]="largura" role="dialog" aria-modal="true"><header><h2>{{titulo}}</h2><button (click)="fechar.emit()" aria-label="Fechar">×</button></header><div class="content"><ng-content /></div></section></div>}
+@if(aberto){<div class="overlay" (mousedown)="fechar.emit()">
+    <section (mousedown)="$event.stopPropagation()" [style.max-width]="largura" role="dialog" aria-modal="true">
+        <header>
+            <h2>{{titulo}}</h2><button (click)="fechar.emit()" aria-label="Fechar">×</button>
+        </header>
+        <div class="content"><ng-content /></div>
+    </section>
+</div>}

@@ -1,4 +1,76 @@
-<app-cabecalho-pagina titulo="Títulos" subtitulo="Gerencie os filmes disponíveis no acervo."><app-botao icone="＋" (acionado)="novo()">Novo título</app-botao></app-cabecalho-pagina>
-<section class="card"><div class="toolbar"><div class="search">⌕<input [(ngModel)]="busca" placeholder="Buscar por nome, categoria ou ator..."></div><span>{{lista.length}} títulos</span></div><div class="table-wrap"><table><thead><tr><th>Título</th><th>Categoria</th><th>Classe</th><th>Ano</th><th>Disponibilidade</th><th class="actions">Ações</th></tr></thead><tbody>@for(x of lista;track x.id){<tr><td><button class="title-link" (click)="detalhe=x"><strong>{{x.nome}}</strong><small>{{x.nomeOriginal}}</small></button></td><td>{{x.categoria}}</td><td>{{x.classe}}</td><td>{{x.ano}}</td><td><app-status [texto]="x.disponiveis+' de '+x.itens+' disponíveis'" [tipo]="x.disponiveis?'sucesso':'alerta'"/></td><td class="actions"><app-botao tipo="icone" icone="◉" (acionado)="detalhe=x"/><app-botao tipo="icone" icone="✎" (acionado)="editar(x)"/><app-botao tipo="icone" icone="⌫" (acionado)="excluir(x)"/></td></tr>}</tbody></table></div></section>
-<app-modal [aberto]="modal" [titulo]="item.id?'Editar título':'Novo título'" largura="760px" (fechar)="modal=false"><div class="form-grid"><label>Nome *<input [(ngModel)]="item.nome"></label><label>Nome original<input [(ngModel)]="item.nomeOriginal"></label><label>Ano<input type="number" [(ngModel)]="item.ano"></label><label>Categoria *<input [(ngModel)]="item.categoria" placeholder="Drama, comédia..."></label><label>Classe *<select [(ngModel)]="item.classe"><option value="">Selecione</option>@for(x of dados.classes();track x.id){<option>{{x.nome}}</option>}</select></label><label>Diretor *<select [(ngModel)]="item.diretor"><option value="">Selecione</option>@for(x of dados.diretores();track x.id){<option>{{x.nome}}</option>}</select></label><label>Nacionalidade<input [(ngModel)]="item.nacionalidade"></label><label>Distribuidor<input [(ngModel)]="item.distribuidor"></label><fieldset class="full"><legend>Atores *</legend><div class="checks">@for(x of dados.atores();track x.id){<label><input type="checkbox" [checked]="item.atores.includes(x.nome)" (change)="atorToggle(x.nome,$event)">{{x.nome}}</label>}</div></fieldset><label class="full">Sinopse<textarea rows="4" [(ngModel)]="item.sinopse"></textarea></label>@if(erro){<p class="error full">{{erro}}</p>}<div class="modal-actions full"><app-botao tipo="secundario" (acionado)="modal=false">Cancelar</app-botao><app-botao (acionado)="salvar()">Salvar título</app-botao></div></div></app-modal>
-<app-modal [aberto]="!!detalhe" titulo="Detalhes do título" (fechar)="detalhe=null">@if(detalhe){<div class="detail"><h3>{{detalhe.nome}}</h3><p class="muted">{{detalhe.nomeOriginal}} · {{detalhe.ano}} · {{detalhe.nacionalidade}}</p><div class="detail-grid"><span><small>Categoria</small>{{detalhe.categoria}}</span><span><small>Classe</small>{{detalhe.classe}}</span><span><small>Valor</small>{{valorDetalhe|currency:'BRL'}}</span><span><small>Disponíveis</small>{{detalhe.disponiveis}} de {{detalhe.itens}}</span><span><small>Diretor</small>{{detalhe.diretor}}</span><span><small>Atores</small>{{detalhe.atores.join(', ')}}</span></div><h4>Sinopse</h4><p>{{detalhe.sinopse}}</p><p><small>Distribuidor: {{detalhe.distribuidor}}</small></p></div>}</app-modal>
+﻿<app-cabecalho-pagina titulo="Títulos" subtitulo="Gerencie os filmes disponíveis no acervo.">
+  <app-botao icone="＋" [desabilitado]="processando || carregando" (acionado)="novo()">Novo título</app-botao>
+</app-cabecalho-pagina>
+@if (erro) { <p class="error" role="alert">{{erro}}</p> }
+<section class="card">
+  <div class="toolbar">
+    <div class="search">⌕<input [(ngModel)]="busca" placeholder="Buscar por nome, categoria ou ator..."></div>
+    <span>{{lista.length}} títulos</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Título</th><th>Categoria</th><th>Classe</th><th>Ano</th><th>Disponibilidade</th><th class="actions">Ações</th></tr></thead>
+      <tbody>
+        @if (carregando) { <tr><td colspan="6" class="empty">Carregando títulos...</td></tr> }
+        @else {
+          @for (x of lista; track x.id) {
+            <tr>
+              <td><button class="title-link" (click)="detalhe=x"><strong>{{x.nome}}</strong><small>{{x.nomeOriginal}}</small></button></td>
+              <td>{{x.categoria}}</td><td>{{x.classe}}</td><td>{{x.ano}}</td>
+              <td><app-status [texto]="x.disponiveis + ' de ' + x.itens + ' disponíveis'" [tipo]="x.disponiveis ? 'sucesso' : 'alerta'" /></td>
+              <td class="actions">
+                <app-botao tipo="icone" icone="◉" (acionado)="detalhe=x" />
+                <app-botao tipo="icone" icone="✎" [desabilitado]="processando" (acionado)="editar(x)" />
+                <app-botao tipo="icone" icone="⌫" [desabilitado]="processando" (acionado)="excluir(x)" />
+              </td>
+            </tr>
+          } @empty { <tr><td colspan="6" class="empty">Nenhum título cadastrado.</td></tr> }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+<app-modal [aberto]="modal" [titulo]="item.id ? 'Editar título' : 'Novo título'" largura="760px" (fechar)="modal=false">
+  <div class="form-grid">
+    <label>Nome *<input [(ngModel)]="item.nome"></label>
+    <label>Nome original<input [(ngModel)]="item.nomeOriginal"></label>
+    <label>Ano<input type="number" [(ngModel)]="item.ano"></label>
+    <label>Categoria *<input [(ngModel)]="item.categoria" placeholder="Drama, comédia..."></label>
+    <label>Classe<input [(ngModel)]="item.classe" placeholder="Informe a classe"></label>
+    <label>Diretor *<select [(ngModel)]="item.diretor">
+      <option value="">Selecione</option>@for (x of dados.diretores(); track x.id) { <option [value]="x.nome">{{x.nome}}</option> }
+    </select></label>
+    <label>Nacionalidade<input [(ngModel)]="item.nacionalidade"></label>
+    <label>Distribuidor<input [(ngModel)]="item.distribuidor"></label>
+    <fieldset class="full">
+      <legend>Atores</legend>
+      <div class="checks">@for (x of dados.atores(); track x.id) {
+        <label><input type="checkbox" [checked]="item.atores.includes(x.nome)" (change)="atorToggle(x.nome, $event)">{{x.nome}}</label>
+      }</div>
+    </fieldset>
+    <label class="full">Sinopse<textarea rows="4" [(ngModel)]="item.sinopse"></textarea></label>
+    @if (erro) { <p class="error full" role="alert">{{erro}}</p> }
+    <div class="modal-actions full">
+      <app-botao tipo="secundario" [desabilitado]="processando" (acionado)="modal=false">Cancelar</app-botao>
+      <app-botao [desabilitado]="processando" (acionado)="salvar()">{{processando ? 'Salvando...' : 'Salvar título'}}</app-botao>
+    </div>
+  </div>
+</app-modal>
+<app-modal [aberto]="!!detalhe" titulo="Detalhes do título" (fechar)="detalhe=null">
+  @if (detalhe) {
+    <div class="detail">
+      <h3>{{detalhe.nome}}</h3>
+      <p class="muted">{{detalhe.nomeOriginal}} · {{detalhe.ano}} · {{detalhe.nacionalidade}}</p>
+      <div class="detail-grid">
+        <span><small>Categoria</small>{{detalhe.categoria}}</span>
+        <span><small>Classe</small>{{detalhe.classe}}</span>
+        <span><small>Valor</small>{{valorDetalhe | currency:'BRL'}}</span>
+        <span><small>Disponíveis</small>{{detalhe.disponiveis}} de {{detalhe.itens}}</span>
+        <span><small>Diretor</small>{{detalhe.diretor}}</span>
+        <span><small>Atores</small>{{detalhe.atores.join(', ')}}</span>
+      </div>
+      <h4>Sinopse</h4><p>{{detalhe.sinopse}}</p>
+      <p><small>Distribuidor: {{detalhe.distribuidor}}</small></p>
+    </div>
+  }
+</app-modal>

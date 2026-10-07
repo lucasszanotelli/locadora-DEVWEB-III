@@ -1,1 +1,29 @@
-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:28px}h1{font:700 28px/1.15 Georgia,serif;color:#172337;margin:0 0 7px}p{margin:0;color:#7b8492;font-size:13px}@media(max-width:600px){header{flex-direction:column}h1{font-size:24px}}
+header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px
+}
+
+h1 {
+    font: 700 28px/1.15 Georgia, serif;
+    color: #172337;
+    margin: 0 0 7px
+}
+
+p {
+    margin: 0;
+    color: #7b8492;
+    font-size: 13px
+}
+
+@media(max-width:600px) {
+    header {
+        flex-direction: column
+    }
+
+    h1 {
+        font-size: 24px
+    }
+}

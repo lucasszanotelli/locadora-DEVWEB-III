@@ -1,1 +1,162 @@
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}.stats>a{display:flex;gap:14px;align-items:center;background:white;border:1px solid #e6e9ed;border-radius:12px;padding:19px;text-decoration:none;color:inherit}.stats i{display:grid;place-items:center;width:43px;height:43px;border-radius:10px;font-style:normal;font-weight:800}.orange{background:#fff0eb;color:#e75a3d}.red{background:#ffebeb;color:#d44949}.blue{background:#eaf2ff;color:#4776b9}.green{background:#e8f7ef;color:#2e8a59}.stats span>*{display:block}.stats small{font-size:9px;color:#89919d;letter-spacing:.7px;font-weight:700}.stats strong{font:700 25px Georgia,serif;color:#182437;margin:4px 0}.stats em{font-size:10px;color:#9299a4;font-style:normal}.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(260px,.8fr);gap:20px}.card header{display:flex;justify-content:space-between;align-items:start;padding:21px 22px 16px}.card h2{font:700 17px Georgia,serif;margin:0 0 5px;color:#1c293a}.card header p{font-size:11px;color:#9097a2;margin:0}.card header>a{font-size:11px;color:#e2553b;text-decoration:none}.quick>a{display:flex;align-items:center;gap:12px;padding:13px 21px;text-decoration:none;color:#303b4b;border-top:1px solid #eef0f3}.quick>a i{font-style:normal;display:grid;place-items:center;width:34px;height:34px;border-radius:8px;background:#fff0eb;color:#e65b40}.quick>a span{flex:1}.quick>a strong,.quick>a small{display:block}.quick>a strong{font-size:12px}.quick>a small{font-size:10px;color:#8c94a0;margin-top:3px}.quick>a b{color:#a4abb5}@media(max-width:1150px){.stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:750px){.dashboard-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 22px
+}
+
+.stats>a {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    background: white;
+    border: 1px solid #e6e9ed;
+    border-radius: 12px;
+    padding: 19px;
+    text-decoration: none;
+    color: inherit
+}
+
+.stats i {
+    display: grid;
+    place-items: center;
+    width: 43px;
+    height: 43px;
+    border-radius: 10px;
+    font-style: normal;
+    font-weight: 800
+}
+
+.orange {
+    background: #fff0eb;
+    color: #e75a3d
+}
+
+.red {
+    background: #ffebeb;
+    color: #d44949
+}
+
+.blue {
+    background: #eaf2ff;
+    color: #4776b9
+}
+
+.green {
+    background: #e8f7ef;
+    color: #2e8a59
+}
+
+.stats span>* {
+    display: block
+}
+
+.stats small {
+    font-size: 9px;
+    color: #89919d;
+    letter-spacing: .7px;
+    font-weight: 700
+}
+
+.stats strong {
+    font: 700 25px Georgia, serif;
+    color: #182437;
+    margin: 4px 0
+}
+
+.stats em {
+    font-size: 10px;
+    color: #9299a4;
+    font-style: normal
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(260px, .8fr);
+    gap: 20px
+}
+
+.card header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 21px 22px 16px
+}
+
+.card h2 {
+    font: 700 17px Georgia, serif;
+    margin: 0 0 5px;
+    color: #1c293a
+}
+
+.card header p {
+    font-size: 11px;
+    color: #9097a2;
+    margin: 0
+}
+
+.card header>a {
+    font-size: 11px;
+    color: #e2553b;
+    text-decoration: none
+}
+
+.quick>a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 21px;
+    text-decoration: none;
+    color: #303b4b;
+    border-top: 1px solid #eef0f3
+}
+
+.quick>a i {
+    font-style: normal;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #fff0eb;
+    color: #e65b40
+}
+
+.quick>a span {
+    flex: 1
+}
+
+.quick>a strong,
+.quick>a small {
+    display: block
+}
+
+.quick>a strong {
+    font-size: 12px
+}
+
+.quick>a small {
+    font-size: 10px;
+    color: #8c94a0;
+    margin-top: 3px
+}
+
+.quick>a b {
+    color: #a4abb5
+}
+
+@media(max-width:1150px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr)
+    }
+}
+
+@media(max-width:750px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr
+    }
+
+    .stats {
+        grid-template-columns: 1fr
+    }
+}

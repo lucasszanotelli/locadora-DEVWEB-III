@@ -13,6 +13,8 @@ import com.backend.model.repository.RepoAtor;
 @Service
 public class ServAtor {
 
+    //implementar a validação no front e no back
+
     private final RepoAtor repoAtor;
 
     public ServAtor(RepoAtor repoAtor) {

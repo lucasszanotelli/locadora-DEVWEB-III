@@ -1,8 +1,52 @@
 <app-cabecalho-pagina titulo="Olá, Marina!" [subtitulo]="'Aqui está o resumo da locadora nesta ' + hoje + '.'" />
 <div class="stats">
-  <a routerLink="/locacoes"><i class="orange">↗</i><span><small>LOCAÇÕES ATIVAS</small><strong>{{locacoesAtivas}}</strong><em>Movimentações atuais</em></span></a>
-  <a routerLink="/devolucoes"><i class="red">!</i><span><small>EM ATRASO</small><strong>{{atrasadas}}</strong><em>Requer atenção</em></span></a>
-  <a routerLink="/clientes"><i class="blue">♙</i><span><small>CLIENTES ATIVOS</small><strong>{{clientesAtivos}}</strong><em>Sócios e dependentes</em></span></a>
-  <a routerLink="/itens"><i class="green">▤</i><span><small>ITENS DISPONÍVEIS</small><strong>{{itensDisponiveis}}</strong><em>de {{dados.itens().length}} no acervo</em></span></a>
+  <a routerLink="/locacoes"><i class="orange">↗</i><span><small>LOCAÇÕES
+        ATIVAS</small><strong>{{locacoesAtivas}}</strong><em>Movimentações atuais</em></span></a>
+  <a routerLink="/devolucoes"><i class="red">!</i><span><small>EM ATRASO</small><strong>{{atrasadas}}</strong><em>Requer
+        atenção</em></span></a>
+  <a routerLink="/clientes"><i class="blue">♙</i><span><small>CLIENTES
+        ATIVOS</small><strong>{{clientesAtivos}}</strong><em>Sócios e dependentes</em></span></a>
+  <a routerLink="/itens"><i class="green">▤</i><span><small>ITENS
+        DISPONÍVEIS</small><strong>{{itensDisponiveis}}</strong><em>de {{dados.itens().length}} no
+        acervo</em></span></a>
 </div>
-<div class="dashboard-grid"><section class="card"><header><div><h2>Locações recentes</h2><p>Movimentações mais recentes</p></div><a routerLink="/locacoes">Ver todas →</a></header><table><thead><tr><th>Cliente</th><th>Título</th><th>Devolução</th><th>Status</th></tr></thead><tbody>@for(x of dados.locacoes().slice(0,4);track x.id){<tr><td><strong>{{x.cliente}}</strong></td><td>{{x.item}}</td><td>{{x.prevista|date:'dd/MM/yyyy'}}</td><td><app-status [texto]="x.status" [tipo]="x.status==='Atrasada'?'erro':x.status==='Devolvida'?'neutro':'sucesso'"/></td></tr>}</tbody></table></section><section class="card quick"><header><div><h2>Acesso rápido</h2><p>Operações do dia a dia</p></div></header><a routerLink="/locacoes"><i>＋</i><span><strong>Nova locação</strong><small>Registrar empréstimo de item</small></span><b>›</b></a><a routerLink="/devolucoes"><i>↙</i><span><strong>Efetuar devolução</strong><small>Receber item e calcular multa</small></span><b>›</b></a><a routerLink="/clientes"><i>♙</i><span><strong>Novo cliente</strong><small>Cadastrar sócio ou dependente</small></span><b>›</b></a><a routerLink="/catalogo"><i>⌕</i><span><strong>Consultar catálogo</strong><small>Buscar títulos disponíveis</small></span><b>›</b></a></section></div>
+<div class="dashboard-grid">
+  <section class="card">
+    <header>
+      <div>
+        <h2>Locações recentes</h2>
+        <p>Movimentações mais recentes</p>
+      </div><a routerLink="/locacoes">Ver todas →</a>
+    </header>
+    <table>
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Título</th>
+          <th>Devolução</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>@for(x of dados.locacoes().slice(0,4);track x.id){<tr>
+          <td><strong>{{x.cliente}}</strong></td>
+          <td>{{x.item}}</td>
+          <td>{{x.prevista|date:'dd/MM/yyyy'}}</td>
+          <td><app-status [texto]="x.status"
+              [tipo]="x.status==='Atrasada'?'erro':x.status==='Devolvida'?'neutro':'sucesso'" /></td>
+        </tr>}</tbody>
+    </table>
+  </section>
+  <section class="card quick">
+    <header>
+      <div>
+        <h2>Acesso rápido</h2>
+        <p>Operações do dia a dia</p>
+      </div>
+    </header><a routerLink="/locacoes"><i>＋</i><span><strong>Nova locação</strong><small>Registrar empréstimo de
+          item</small></span><b>›</b></a><a routerLink="/devolucoes"><i>↙</i><span><strong>Efetuar
+          devolução</strong><small>Receber item e calcular multa</small></span><b>›</b></a><a
+      routerLink="/clientes"><i>♙</i><span><strong>Novo cliente</strong><small>Cadastrar sócio ou
+          dependente</small></span><b>›</b></a><a routerLink="/catalogo"><i>⌕</i><span><strong>Consultar
+          catálogo</strong><small>Buscar títulos disponíveis</small></span><b>›</b></a>
+  </section>
+</div>

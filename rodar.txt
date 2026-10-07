@@ -1,5 +1,10 @@
+//linux
 cd backend/demo
 bash mvnw spring-boot:run -Djava.version=21
+
+//windows
+cd backend\demo
+mvn spring-boot:run
 
 cd frontend-angular
 npm start
