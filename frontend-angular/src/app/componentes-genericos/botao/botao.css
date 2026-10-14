@@ -18,28 +18,28 @@ button:disabled {
 }
 
 .primario {
-    background: #f15b40;
+    background: #2f8f4e;
     color: white;
-    box-shadow: 0 4px 12px #f15b4030
+    box-shadow: 0 4px 12px #2f8f4e30
 }
 
 .primario:hover {
-    background: #dc4d34
+    background: #267a42
 }
 
 .secundario {
     background: white;
-    color: #354052;
-    border-color: #dce1e8
+    color: #2d4737;
+    border-color: #d8e3d8
 }
 
 .secundario:hover {
-    background: #f6f7f9
+    background: #f4f8f3
 }
 
 .perigo {
-    background: #fff0ed;
-    color: #c7422d
+    background: #fff2e6;
+    color: #b45b18
 }
 
 .icone {
@@ -47,9 +47,9 @@ button:disabled {
     height: 34px;
     padding: 0;
     background: transparent;
-    color: #677287
+    color: #607662
 }
 
 .icone:hover {
-    background: #eef1f5
+    background: #edf5ed
 }

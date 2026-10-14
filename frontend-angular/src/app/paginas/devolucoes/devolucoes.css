@@ -16,8 +16,8 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: #fff0eb;
-    color: #e4593e;
+    background: #fff2e6;
+    color: #d87821;
     font-weight: 800;
     font-size: 12px
 }
@@ -30,7 +30,7 @@
 
 .return-search>p,
 .receipt p {
-    color: #858e9b;
+    color: #718273;
     font-size: 12px
 }
 
@@ -47,11 +47,11 @@
 .success-box {
     display: flex;
     gap: 12px;
-    background: #eaf7ef;
+    background: #e8f7ef;
     padding: 14px;
     border-radius: 9px;
     margin-top: 20px;
-    color: #267a4c
+    color: #267a42
 }
 
 .success-box b {
@@ -89,7 +89,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #f7f8fa;
+    background: #f5f8f4;
     padding: 14px;
     border-radius: 9px;
     margin: 22px 0
@@ -101,7 +101,7 @@
     width: 38px;
     height: 38px;
     border-radius: 8px;
-    background: #172337;
+    background: #12351f;
     color: white;
     font-style: normal
 }
@@ -111,7 +111,7 @@
 }
 
 .movie small {
-    color: #8b94a1;
+    color: #7f9082;
     margin-top: 4px
 }
 
@@ -128,20 +128,20 @@ dl div>* {
 
 dt {
     font-size: 10px;
-    color: #8b94a0;
+    color: #7f9082;
     text-transform: uppercase;
     margin-bottom: 4px
 }
 
 dd {
     font-size: 12px;
-    color: #243044;
+    color: #21362b;
     margin: 0;
     font-weight: 600
 }
 
 .values {
-    border-top: 1px solid #e8ebef;
+    border-top: 1px solid #e3ebe2;
     padding-top: 11px
 }
 
@@ -152,18 +152,18 @@ dd {
 }
 
 .values b {
-    color: #283447
+    color: #21362b
 }
 
 .values .fine {
-    color: #d64f3b
+    color: #d87821
 }
 
 .values .total {
     font-size: 15px;
-    border-top: 1px dashed #dce1e7;
+    border-top: 1px dashed #d8e3d8;
     padding-top: 14px;
-    color: #1c293a
+    color: #12351f
 }
 
 .values .total b {

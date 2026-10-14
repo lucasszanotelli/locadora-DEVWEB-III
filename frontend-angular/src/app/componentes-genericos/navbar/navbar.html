@@ -1,6 +1,7 @@
 <button class="mobile-menu" (click)="menuOpen.set(!menuOpen())" aria-label="Abrir menu">☰</button>
 <aside [class.open]="menuOpen()">
-  <a class="brand" routerLink="/inicio" (click)="menuOpen.set(false)"><span class="brand-mark">▶</span><span><strong>Passatempo</strong><small>videolocadora</small></span></a>
+  <a class="brand" routerLink="/inicio" (click)="menuOpen.set(false)"><span
+      class="brand-mark">▶</span><span><strong>Locadora</strong><small>Videolocadora</small></span></a>
   <nav>
     <span class="nav-label">VISÃO GERAL</span>
     <a routerLink="/inicio" routerLinkActive="active" (click)="menuOpen.set(false)"><i>⌂</i> Início</a>
@@ -16,6 +17,8 @@
     <a routerLink="/devolucoes" routerLinkActive="active" (click)="menuOpen.set(false)"><i>↙</i> Devoluções</a>
     <a routerLink="/catalogo" routerLinkActive="active" (click)="menuOpen.set(false)"><i>⌕</i> Consultar catálogo</a>
   </nav>
-  <div class="employee"><span>MA</span><div><strong>Marina Alves</strong><small>Funcionária</small></div><b>⋮</b></div>
+  <div class="employee"><span>PU</span>
+    <div><strong>Perfil de Usuário</strong><small>Função</small></div><b>⋮</b>
+  </div>
 </aside>
 @if (menuOpen()) { <button class="backdrop" (click)="menuOpen.set(false)" aria-label="Fechar menu"></button> }

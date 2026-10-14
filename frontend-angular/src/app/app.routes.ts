@@ -2,7 +2,7 @@ import { Atores } from './paginas/atores/atores';
 import { Diretores } from './paginas/diretores/diretores';
 import { Routes } from '@angular/router';
 import { Inicio } from './paginas/inicio/inicio';
-import { CadastroSimples } from './paginas/cadastro-simples/cadastro-simples';
+import { Classes } from './paginas/classes/classes';
 import { Titulos } from './paginas/titulos/titulos';
 import { Itens } from './paginas/itens/itens';
 import { Clientes } from './paginas/clientes/clientes';
@@ -17,7 +17,7 @@ export const routes: Routes = [
   {path:'itens',component:Itens},
   {path:'atores',component:Atores},
   {path:'diretores',component:Diretores},
-  {path:'classes',component:CadastroSimples,data:{tipo:'classes',titulo:'Classes'}},
+  {path:'classes',component:Classes},
   {path:'clientes',component:Clientes},
   {path:'locacoes',component:Locacoes},
   {path:'devolucoes',component:Devolucoes},

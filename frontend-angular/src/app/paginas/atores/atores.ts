@@ -8,6 +8,7 @@ import { CabecalhoPagina } from '../../componentes-genericos/cabecalho-pagina/ca
 import { Botao } from '../../componentes-genericos/botao/botao';
 import { Modal } from '../../componentes-genericos/modal/modal';
 import { InputComponent } from '../../componentes-genericos/input/input';
+import { CamposAtor, validarAtor } from './validacao-ator';
 
 @Component({
   selector: 'app-atores', standalone: true,
@@ -24,6 +25,8 @@ export class Atores implements OnInit {
   busca = '';
   erro = '';
   erroFormulario = '';
+  errosCampos: CamposAtor = { nome: '', nacionalidade: '', dataNascimento: '' };
+  tentouSalvar = false;
   item: Ator = this.vazio();
 
   ngOnInit() { this.carregar(); }
@@ -41,13 +44,21 @@ export class Atores implements OnInit {
       error: () => this.erro = 'Não foi possível carregar os atores. Verifique se o backend está em execução.'
     });
   }
-  novo() { this.item = this.vazio(); this.erroFormulario = ''; this.modal = true; }
-  editar(ator: Ator) { this.item = { ...ator }; this.erroFormulario = ''; this.modal = true; }
+  private limparValidacao() { this.erroFormulario = ''; this.tentouSalvar = false; this.errosCampos = { nome: '', nacionalidade: '', dataNascimento: '' }; }
+  novo() { this.item = this.vazio(); this.limparValidacao(); this.modal = true; }
+  editar(ator: Ator) { this.item = { ...ator }; this.limparValidacao(); this.modal = true; }
+  get hoje() { const data = new Date(); return `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`; }
+  atualizarCampo(campo: keyof CamposAtor, valor: string) {
+    this.item[campo] = valor;
+    if (this.tentouSalvar) { this.errosCampos = validarAtor(this.item); this.erroFormulario = ''; }
+  }
   fechar() { if (!this.processando) this.modal = false; }
   salvar() {
     if (this.processando) return;
+    this.tentouSalvar = true;
+    this.errosCampos = validarAtor(this.item);
+    if (Object.values(this.errosCampos).some(Boolean)) { this.erroFormulario = 'Corrija os campos indicados antes de salvar.'; return; }
     const { nome, nacionalidade, dataNascimento } = this.item;
-    if (!nome.trim()) { this.erroFormulario = 'Informe o nome do ator.'; return; }
     const dados = { nome: nome.trim(), nacionalidade: (nacionalidade ?? '').trim(), dataNascimento: dataNascimento ?? '' };
     const requisicao = this.item.id ? this.api.atualizar(this.item.id, dados) : this.api.inserir(dados);
     this.processando = true;
@@ -59,7 +70,7 @@ export class Atores implements OnInit {
         this.modal = false;
         this.erro = '';
       },
-      error: e => this.erroFormulario = e.status === 404 ? 'Este ator não foi encontrado. Atualize a lista.' : 'Não foi possível salvar o ator. Verifique os dados e a conexão com o backend.'
+      error: e => this.erroFormulario = e.status === 404 ? 'Este ator não foi encontrado. Atualize a lista.' : e.status === 400 ? 'Dados inválidos. Preencha todos os campos e informe uma data de nascimento válida.' : 'Não foi possível salvar o ator. Verifique os dados e a conexão com o backend.'
     });
   }
   excluir(ator: Ator) {

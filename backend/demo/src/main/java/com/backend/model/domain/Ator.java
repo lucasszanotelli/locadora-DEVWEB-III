@@ -1,6 +1,7 @@
 package com.backend.model.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,8 +15,11 @@ public class Ator {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private String nome;
+    @Column(nullable = false)
     private String nacionalidade;
+    @Column(nullable = false)
     private String dataNascimento;
 
     public Ator() {

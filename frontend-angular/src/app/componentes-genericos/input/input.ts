@@ -14,5 +14,6 @@ export class InputComponent {
   @Input() required = false;
   @Input() erro = '';
   @Input() min?: string | number;
+  @Input() max?: string | number;
   @Output() valueChange = new EventEmitter<string>();
 }

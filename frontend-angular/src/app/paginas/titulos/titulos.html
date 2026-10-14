@@ -36,7 +36,14 @@
     <label>Nome original<input [(ngModel)]="item.nomeOriginal"></label>
     <label>Ano<input type="number" [(ngModel)]="item.ano"></label>
     <label>Categoria *<input [(ngModel)]="item.categoria" placeholder="Drama, comédia..."></label>
-    <label>Classe<input [(ngModel)]="item.classe" placeholder="Informe a classe"></label>
+    <label>Classe<select [(ngModel)]="item.classe">
+      <option value="">Selecione a classe</option>
+      @for (classe of dados.classes(); track classe.id) {
+        <option [value]="classe.nome">{{classe.nome}}</option>
+      }
+    </select>
+      @if (!dados.classes().length) { <small>Nenhuma classe cadastrada. Cadastre uma na página Classes.</small> }
+    </label>
     <label>Diretor *<select [(ngModel)]="item.diretor">
       <option value="">Selecione</option>@for (x of dados.diretores(); track x.id) { <option [value]="x.nome">{{x.nome}}</option> }
     </select></label>

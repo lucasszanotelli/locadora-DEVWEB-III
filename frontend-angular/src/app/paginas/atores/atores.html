@@ -19,9 +19,9 @@
 </section>
 <app-modal [aberto]="modal" [titulo]="item.id ? 'Editar Ator' : 'Novo Ator'" (fechar)="fechar()">
   <div class="form-grid">
-    <app-input class="full" label="Nome" [required]="true" [value]="item.nome" (valueChange)="item.nome=$event" placeholder="Informe o nome"/>
-    <app-input label="Nacionalidade" [value]="item.nacionalidade" (valueChange)="item.nacionalidade=$event"/>
-    <app-input label="Data de nascimento" type="date" [value]="item.dataNascimento" (valueChange)="item.dataNascimento=$event"/>
+    <app-input class="full" label="Nome" [required]="true" [erro]="errosCampos.nome" [value]="item.nome" (valueChange)="atualizarCampo('nome', $event)" placeholder="Informe o nome"/>
+    <app-input label="Nacionalidade" [required]="true" [erro]="errosCampos.nacionalidade" [value]="item.nacionalidade" (valueChange)="atualizarCampo('nacionalidade', $event)"/>
+    <app-input label="Data de nascimento" type="date" [required]="true" min="0001-01-01" [max]="hoje" [erro]="errosCampos.dataNascimento" [value]="item.dataNascimento" (valueChange)="atualizarCampo('dataNascimento', $event)"/>
     @if (erroFormulario) { <p class="error full" role="alert">{{erroFormulario}}</p> }
     <div class="modal-actions full"><app-botao tipo="secundario" [desabilitado]="processando" (acionado)="fechar()">Cancelar</app-botao><app-botao [desabilitado]="processando" (acionado)="salvar()">{{processando ? 'Salvando...' : 'Salvar'}}</app-botao></div>
   </div>

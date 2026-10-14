@@ -10,7 +10,7 @@
     gap: 14px;
     align-items: center;
     background: white;
-    border: 1px solid #e6e9ed;
+    border: 1px solid #dde7dd;
     border-radius: 12px;
     padding: 19px;
     text-decoration: none;
@@ -28,18 +28,18 @@
 }
 
 .orange {
-    background: #fff0eb;
-    color: #e75a3d
+    background: #fff2e6;
+    color: #d87821
 }
 
 .red {
-    background: #ffebeb;
-    color: #d44949
+    background: #fdf1e3;
+    color: #b45b18
 }
 
 .blue {
-    background: #eaf2ff;
-    color: #4776b9
+    background: #e9f6ed;
+    color: #2f8f4e
 }
 
 .green {
@@ -53,20 +53,20 @@
 
 .stats small {
     font-size: 9px;
-    color: #89919d;
+    color: #7f9082;
     letter-spacing: .7px;
     font-weight: 700
 }
 
 .stats strong {
     font: 700 25px Georgia, serif;
-    color: #182437;
+    color: #12351f;
     margin: 4px 0
 }
 
 .stats em {
     font-size: 10px;
-    color: #9299a4;
+    color: #8d9a90;
     font-style: normal
 }
 
@@ -86,18 +86,18 @@
 .card h2 {
     font: 700 17px Georgia, serif;
     margin: 0 0 5px;
-    color: #1c293a
+    color: #12351f
 }
 
 .card header p {
     font-size: 11px;
-    color: #9097a2;
+    color: #7f9082;
     margin: 0
 }
 
 .card header>a {
     font-size: 11px;
-    color: #e2553b;
+    color: #d87821;
     text-decoration: none
 }
 
@@ -107,8 +107,8 @@
     gap: 12px;
     padding: 13px 21px;
     text-decoration: none;
-    color: #303b4b;
-    border-top: 1px solid #eef0f3
+    color: #2d4737;
+    border-top: 1px solid #e8efe7
 }
 
 .quick>a i {
@@ -118,8 +118,8 @@
     width: 34px;
     height: 34px;
     border-radius: 8px;
-    background: #fff0eb;
-    color: #e65b40
+    background: #fff2e6;
+    color: #d87821
 }
 
 .quick>a span {
@@ -137,12 +137,12 @@
 
 .quick>a small {
     font-size: 10px;
-    color: #8c94a0;
+    color: #7f9082;
     margin-top: 3px
 }
 
 .quick>a b {
-    color: #a4abb5
+    color: #95a49a
 }
 
 @media(max-width:1150px) {

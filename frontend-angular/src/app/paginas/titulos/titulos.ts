@@ -11,6 +11,7 @@ import { TituloApi, TituloService } from '../../dados/titulo.service';
 import { ItemService } from '../../dados/item.service';
 import { AtorService } from '../../dados/ator.service';
 import { DiretorService } from '../../dados/diretor.service';
+import { ClasseService } from '../../dados/classe.service';
 
 @Component({ selector: 'app-titulos', standalone: true, imports: [FormsModule, CurrencyPipe, CabecalhoPagina, Botao, Modal, Status], templateUrl: './titulos.html' })
 export class Titulos implements OnInit {
@@ -18,12 +19,14 @@ export class Titulos implements OnInit {
   private itemApi = inject(ItemService);
   private atorApi = inject(AtorService);
   private diretorApi = inject(DiretorService);
+  private classeApi = inject(ClasseService);
   busca = ''; modal = false; erro = ''; carregando = false; processando = false;
   detalhe: Titulo | null = null;
   item = this.vazio();
   constructor(public dados: LocadoraService) { }
   ngOnInit() {
     this.carregar();
+    this.classeApi.listar().subscribe({ next: xs => this.dados.classes.set(xs), error: () => this.erro = 'Não foi possível carregar as classes. Verifique a conexão com o backend.' });
     this.itemApi.listar().subscribe({ next: itens => { this.dados.itens.set(itens.map(i => ({ id: i.serial, serie: i.numeroSerie, titulo: i.titulo, aquisicao: i.dataAquisicao, tipo: i.tipoItem, status: i.status }))); this.recontarTitulos(); }, error: () => {} });
     this.atorApi.listar().subscribe({ next: xs => this.dados.atores.set(xs.map(x => ({ id: x.id, nome: x.nome }))), error: () => {} });
     this.diretorApi.listar().subscribe({ next: xs => this.dados.diretores.set(xs.map(x => ({ id: x.id, nome: x.nome }))), error: () => {} });

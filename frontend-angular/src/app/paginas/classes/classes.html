@@ -1,0 +1,41 @@
+<app-cabecalho-pagina titulo="Classes" subtitulo="Cadastre e gerencie as classes do acervo.">
+  <app-botao icone="＋" [desabilitado]="carregando || processando" (acionado)="novo()">Nova classe</app-botao>
+</app-cabecalho-pagina>
+@if (erro && !modal) { <p class="error" role="alert">{{erro}}</p> }
+<section class="card">
+  <div class="toolbar">
+    <div class="search">⌕<input placeholder="Buscar por nome..." [(ngModel)]="busca"></div>
+    <span>{{lista.length}} classes</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Nome</th><th>Valor</th><th>Prazo de devolução</th><th class="actions">Ações</th></tr></thead>
+      <tbody>
+        @if (carregando) { <tr><td colspan="4" class="empty">Carregando classes...</td></tr> }
+        @else {
+          @for (classe of lista; track classe.id) {
+            <tr>
+              <td><strong>{{classe.nome}}</strong></td><td>{{classe.valor | currency:'BRL'}}</td><td>{{classe.prazo}} dias</td>
+              <td class="actions">
+                <app-botao tipo="icone" icone="✎" [desabilitado]="processando" (acionado)="editar(classe)" />
+                <app-botao tipo="icone" icone="⌫" [desabilitado]="processando" (acionado)="excluir(classe)" />
+              </td>
+            </tr>
+          } @empty { <tr><td colspan="4" class="empty">Nenhuma classe encontrada.</td></tr> }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+<app-modal [aberto]="modal" [titulo]="item.id ? 'Editar classe' : 'Nova classe'" (fechar)="modal=false">
+  <div class="form-grid">
+    <label class="full">Nome *<input [(ngModel)]="item.nome" [disabled]="processando" placeholder="Informe o nome"></label>
+    <label>Valor da locação *<input type="number" min="0.01" step="0.01" [(ngModel)]="item.valor" [disabled]="processando"></label>
+    <label>Prazo de devolução (dias) *<input type="number" min="1" step="1" [(ngModel)]="item.prazo" [disabled]="processando"></label>
+    @if (erro) { <p class="error full" role="alert">{{erro}}</p> }
+    <div class="modal-actions full">
+      <app-botao tipo="secundario" [desabilitado]="processando" (acionado)="modal=false">Cancelar</app-botao>
+      <app-botao [desabilitado]="processando" (acionado)="salvar()">{{processando ? 'Salvando...' : 'Salvar classe'}}</app-botao>
+    </div>
+  </div>
+</app-modal>

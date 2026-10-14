@@ -49,7 +49,9 @@ Corpo para inserção e edição:
 }
 ```
 
-Nome é obrigatório. Nacionalidade e nascimento são opcionais. Quando informada, a data deve seguir `AAAA-MM-DD`. O ID é gerado no banco. Registros inexistentes retornam 404 e dados inválidos retornam 400.
+Nome, nacionalidade e data de nascimento são obrigatórios. Valores nulos, ausentes, vazios ou com apenas espaços são rejeitados. A data deve seguir `AAAA-MM-DD`, existir no calendário e não estar no futuro. O ID é gerado no banco. Registros inexistentes retornam 404 e dados inválidos retornam 400, tanto na inserção quanto na edição.
+
+O Angular mostra os erros abaixo de cada campo e impede o envio antes de corrigir o formulário. O backend repete as verificações antes de salvar. A entidade declara os campos com `@Column(nullable = false)`. Para tabelas SQLite antigas, `RestricoesAtor` cria triggers de inserção e atualização que também impedem valores nulos e vazios, sem apagar registros existentes. Registros antigos incompletos precisam ser preenchidos ao editar.
 
 ## Verificação
 
