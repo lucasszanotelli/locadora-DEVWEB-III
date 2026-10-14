@@ -1,1 +1,5 @@
-<div class="field"><label>{{label}} @if(required){<span>*</span>}</label><input [type]="type" [placeholder]="placeholder" [value]="value" [required]="required" [min]="min ?? null" [max]="max ?? null" [class.invalid]="erro" [attr.aria-invalid]="erro ? 'true' : null" (input)="valueChange.emit($any($event.target).value)" />@if(erro){<small>{{erro}}</small>}</div>
+<div class="field"><label>{{label}} @if(required){<span>*</span>}</label><input [type]="type"
+        [placeholder]="placeholder" [value]="value" [required]="required" [min]="min ?? null" [max]="max ?? null"
+        [class.invalid]="erro" [attr.aria-invalid]="erro ? 'true' : null"
+        (input)="valueChange.emit($any($event.target).value)" />@if(erro){<small>{{erro}}</small>}
+</div>

@@ -1,11 +1,13 @@
 # Backend (Java 21) - executar a partir da raiz do repositorio
 # Linux
-cd backend/demo
-bash mvnw spring-boot:run
+cd backend/demo bash mvnw spring-boot:run
+
+# Swagger UI: http://localhost:8080/swagger-ui.html
+# Documentacao OpenAPI (JSON): http://localhost:8080/v3/api-docs
+# Para testar: escolha uma rota, clique em Try it out, preencha e clique em Execute.
 
 # Windows
-cd backend\demo
-.\mvnw.cmd spring-boot:run
+cd backend\demo .\mvnw.cmd spring-boot:run
 
 # SQLite: backend/demo/data/locadora.db acompanha o repositorio.
 # Nao precisa iniciar um servidor de banco separado.
@@ -13,5 +15,4 @@ cd backend\demo
 # Pare o backend antes de fazer commit do banco.
 
 # Frontend - em outro terminal, a partir da raiz do repositorio
-cd frontend-angular
-npm start
+cd frontend-angular npm start

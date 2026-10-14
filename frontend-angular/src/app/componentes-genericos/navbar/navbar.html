@@ -3,19 +3,30 @@
   <a class="brand" routerLink="/inicio" (click)="menuOpen.set(false)"><span
       class="brand-mark">▶</span><span><strong>Locadora</strong><small>Videolocadora</small></span></a>
   <nav>
+    
     <span class="nav-label">VISÃO GERAL</span>
+
     <a routerLink="/inicio" routerLinkActive="active" (click)="menuOpen.set(false)"><i>⌂</i> Início</a>
+
     <span class="nav-label">CONTROLE DE ACERVO</span>
+
     <a routerLink="/titulos" routerLinkActive="active" (click)="menuOpen.set(false)"><i>▣</i> Títulos</a>
     <a routerLink="/itens" routerLinkActive="active" (click)="menuOpen.set(false)"><i>▤</i> Itens</a>
     <a routerLink="/atores" routerLinkActive="active" (click)="menuOpen.set(false)"><i>☆</i> Atores</a>
     <a routerLink="/diretores" routerLinkActive="active" (click)="menuOpen.set(false)"><i>◉</i> Diretores</a>
     <a routerLink="/classes" routerLinkActive="active" (click)="menuOpen.set(false)"><i>◇</i> Classes</a>
+
     <span class="nav-label">ATENDIMENTO</span>
+
     <a routerLink="/clientes" routerLinkActive="active" (click)="menuOpen.set(false)"><i>♙</i> Clientes</a>
     <a routerLink="/locacoes" routerLinkActive="active" (click)="menuOpen.set(false)"><i>↗</i> Locações</a>
     <a routerLink="/devolucoes" routerLinkActive="active" (click)="menuOpen.set(false)"><i>↙</i> Devoluções</a>
     <a routerLink="/catalogo" routerLinkActive="active" (click)="menuOpen.set(false)"><i>⌕</i> Consultar catálogo</a>
+    
+    <span class="nav-label">DOCUMENTAÇÃO</span>
+    
+    <a href="http://localhost:8080/swagger-ui.html" target="_blank" rel="noopener noreferrer"
+      aria-label="Swagger (abre em nova aba)" (click)="menuOpen.set(false)"><i aria-hidden="true">↗</i> Swagger</a>
   </nav>
   <div class="employee"><span>PU</span>
     <div><strong>Perfil de Usuário</strong><small>Função</small></div><b>⋮</b>

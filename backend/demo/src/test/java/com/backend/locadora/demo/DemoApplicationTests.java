@@ -29,6 +29,25 @@ class DemoApplicationTests {
     }
 
     @Test
+    void disponibilizaDocumentacaoESwaggerUi() throws Exception {
+        var documentacao = request("GET", "/v3/api-docs", null);
+        assertEquals(200, documentacao.statusCode());
+        var json = new tools.jackson.databind.ObjectMapper().readTree(documentacao.body());
+        assertEquals("API da Locadora", json.path("info").path("title").asText());
+        for (String recurso : new String[] { "/atores", "/diretores", "/classes", "/titulos", "/itens" }) {
+            var rota = json.path("paths").path(recurso);
+            assertTrue(rota.has("get"), recurso);
+            assertTrue(rota.has("post"), recurso);
+        }
+        var pagina = request("GET", "/swagger-ui/index.html", null);
+        assertEquals(200, pagina.statusCode());
+        assertTrue(pagina.body().contains("swagger-ui-bundle.js"));
+        var configuracao = request("GET", "/v3/api-docs/swagger-config", null);
+        assertEquals(200, configuracao.statusCode());
+        assertTrue(configuracao.body().contains("/v3/api-docs"));
+    }
+
+    @Test
     void validaCamposDoAtorNaInsercaoEEdicao() throws Exception {
         String valido = "{\"nome\":\"Ator validacao\",\"nacionalidade\":\" Brasil \",\"dataNascimento\":\"2000-02-29\"}";
         var criado = request("POST", "/atores", valido);
