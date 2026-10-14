@@ -34,5 +34,7 @@ build/
 
 ### SQLite ###
 locadora.db
+!data/locadora.db
 locadora.db-shm
 locadora.db-wal
+locadora.db-journal

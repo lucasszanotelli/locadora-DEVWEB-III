@@ -1,8 +1,17 @@
-//linux
+# Backend (Java 21) - executar a partir da raiz do repositorio
+# Linux
 cd backend/demo
-bash mvnw spring-boot:run -Djava.version=21
+bash mvnw spring-boot:run
 
-//windows
-cd backend\demo .\mvnw.cmd spring-boot:run
+# Windows
+cd backend\demo
+.\mvnw.cmd spring-boot:run
 
-cd frontend-angular npm start
+# SQLite: backend/demo/data/locadora.db acompanha o repositorio.
+# Nao precisa iniciar um servidor de banco separado.
+# Ao alterar dados, inclua o arquivo .db no commit para compartilhar as alteracoes.
+# Pare o backend antes de fazer commit do banco.
+
+# Frontend - em outro terminal, a partir da raiz do repositorio
+cd frontend-angular
+npm start
