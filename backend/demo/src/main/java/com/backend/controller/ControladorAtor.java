@@ -2,8 +2,10 @@ package com.backend.controller;
 
 import java.net.URI;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.backend.excecoes.ExcecaoAtor;
 import com.backend.model.domain.Ator;
 import com.backend.model.service.ServAtor;
 
@@ -22,8 +24,9 @@ public class ControladorAtor {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ator> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.of(servAtor.buscarPorId(id));
+    public Ator buscarPorId(@PathVariable Integer id) {
+        return servAtor.buscarPorId(id).orElseThrow(() ->
+                new ExcecaoAtor(HttpStatus.NOT_FOUND, "Ator com ID " + id + " não encontrado."));
     }
 
     @PostMapping

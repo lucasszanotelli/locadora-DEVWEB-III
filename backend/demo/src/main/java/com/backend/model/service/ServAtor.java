@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import com.backend.excecoes.ExcecaoAtor;
 
 import com.backend.model.domain.Ator;
 import com.backend.model.repository.RepoAtor;
@@ -46,25 +46,25 @@ public class ServAtor {
 
     private void validar(Ator ator) {
         if (ator.getNome() == null || ator.getNome().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O nome do ator é obrigatório.");
+            throw new ExcecaoAtor(HttpStatus.BAD_REQUEST, "O nome do ator é obrigatório.");
         }
         ator.setNome(ator.getNome().trim());
         if (ator.getNacionalidade() == null || ator.getNacionalidade().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A nacionalidade do ator é obrigatória.");
+            throw new ExcecaoAtor(HttpStatus.BAD_REQUEST, "A nacionalidade do ator é obrigatória.");
         }
         ator.setNacionalidade(ator.getNacionalidade().trim());
         String nascimento = ator.getDataNascimento();
         if (nascimento == null || nascimento.isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A data de nascimento é obrigatória.");
+            throw new ExcecaoAtor(HttpStatus.BAD_REQUEST, "A data de nascimento é obrigatória.");
         }
         try {
             if (!nascimento.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) throw new DateTimeParseException("Formato inválido", nascimento, 0);
             LocalDate data = LocalDate.parse(nascimento);
             if (data.getYear() < 1 || data.isAfter(LocalDate.now())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A data de nascimento deve ser válida e não pode estar no futuro.");
+                throw new ExcecaoAtor(HttpStatus.BAD_REQUEST, "A data de nascimento deve ser válida e não pode estar no futuro.");
             }
         } catch (DateTimeParseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Data de nascimento inválida. Use AAAA-MM-DD.");
+            throw new ExcecaoAtor(HttpStatus.BAD_REQUEST, "Data de nascimento inválida. Use AAAA-MM-DD.");
         }
     }
 
