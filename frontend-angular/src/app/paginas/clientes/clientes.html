@@ -1,5 +1,7 @@
 <app-cabecalho-pagina titulo="Clientes" subtitulo="Gerencie sócios e seus dependentes."><app-botao icone="＋"
-        (acionado)="novo()">Novo cliente</app-botao></app-cabecalho-pagina>
+        [desabilitado]="processando || carregando" (acionado)="novo()">Novo cliente</app-botao></app-cabecalho-pagina>
+@if (erroLista) { <p class="error" role="alert">{{erroLista}}</p><app-botao tipo="secundario"
+    [desabilitado]="processando || carregando" (acionado)="carregar()">Atualizar lista</app-botao> }
 <section class="card">
     <div class="toolbar">
         <div class="search">⌕<input [(ngModel)]="busca" placeholder="Buscar por nome, inscrição ou CPF..."></div>
@@ -17,7 +19,8 @@
                     <th class="actions">Ações</th>
                 </tr>
             </thead>
-            <tbody>@for(x of lista;track x.id){<tr>
+            <tbody>@if (carregando) { <tr><td colspan="6" class="empty">Carregando clientes...</td></tr> }
+                @else { @for(x of lista;track x.id){<tr>
                     <td><strong>{{x.inscricao}}</strong></td>
                     <td>{{x.nome}}@if(x.tipo==='Dependente'){<small class="block">Dependente de
                             {{nomeSocio(x.socioId)}}</small>}</td>
@@ -27,7 +30,7 @@
                     <td class="actions"><app-botao tipo="icone" icone="✎" (acionado)="editar(x)" /><app-botao
                             tipo="icone" [icone]="x.ativo?'⊘':'↻'" (acionado)="alternar(x)" /><app-botao tipo="icone"
                             icone="⌫" (acionado)="excluir(x)" /></td>
-                </tr>}</tbody>
+                </tr>} @empty { <tr><td colspan="6" class="empty">Nenhum cliente encontrado.</td></tr> } }</tbody>
         </table>
     </div>
 </section>
@@ -51,8 +54,9 @@
                 <option>Prefiro não informar</option>
             </select></label><label>Data de nascimento *<input type="date"
                 [(ngModel)]="item.nascimento"></label>@if(erro){<p class="error full">{{erro}}</p>}<div
-            class="modal-actions full"><app-botao tipo="secundario"
-                (acionado)="modal=false">Cancelar</app-botao><app-botao (acionado)="salvar()">Salvar cliente</app-botao>
+            class="modal-actions full"><app-botao tipo="secundario" [desabilitado]="processando"
+                (acionado)="modal=false">Cancelar</app-botao><app-botao [desabilitado]="processando"
+                (acionado)="salvar()">{{processando ? 'Salvando...' : 'Salvar cliente'}}</app-botao>
         </div>
     </div>
 </app-modal>

@@ -1,8 +1,26 @@
 .return-layout {
     display: grid;
-    grid-template-columns: minmax(320px, .9fr) minmax(360px, 1.1fr);
+    grid-template-columns: minmax(0, 720px);
+    justify-content: center;
     gap: 22px;
     align-items: start
+}
+
+.return-search {
+    text-align: center
+}
+
+.return-search>.step {
+    margin-inline: auto
+}
+
+.open-rentals {
+    margin-top: 24px
+}
+
+.open-rentals h2 {
+    font: 700 19px Georgia, serif;
+    margin: 0
 }
 
 .return-search,
@@ -41,7 +59,8 @@
 }
 
 .serial input {
-    flex: 1
+    flex: 1;
+    min-width: 0
 }
 
 .success-box {
@@ -181,6 +200,12 @@ dd {
 
 @media(max-width:800px) {
     .return-layout {
-        grid-template-columns: 1fr
+        grid-template-columns: minmax(0, 720px)
+    }
+}
+
+@media(max-width:480px) {
+    .serial {
+        flex-direction: column
     }
 }

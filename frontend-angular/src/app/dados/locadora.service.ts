@@ -52,6 +52,10 @@ export interface Cliente {
 }
 export interface Locacao {
   id: number
+  clienteId: number
+  itemId: number
+  diasAtraso: number
+  total: number
   item: string
   serie: string
   cliente: string
@@ -130,14 +134,6 @@ export class LocadoraService {
               ).padStart(4, '0')}`
             }
           ]
-    )
-  }
-  salvarLocacao (item: Locacao) {
-    const xs = this.locacoes()
-    this.locacoes.set(
-      item.id
-        ? xs.map(x => (x.id === item.id ? item : x))
-        : [...xs, { ...item, id: this.proximo(xs) }]
     )
   }
 }

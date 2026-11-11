@@ -1,19 +1,19 @@
-<app-cabecalho-pagina titulo="Efetuar devolução" subtitulo="Localize a locação pelo número de série do item." />
+<app-cabecalho-pagina titulo="Efetuar devolução" subtitulo="Acompanhe as locações em aberto e consulte devoluções pelo número de série." />
 <div class="return-layout">
     <section class="card return-search">
         <div class="step">1</div>
         <h2>Identifique o item</h2>
-        <p>Informe o número de série impresso na etiqueta do item.</p>
-        <div class="serial"><input [(ngModel)]="serie" (keyup.enter)="buscar()"
-                placeholder="Ex.: DVD-2024-001"><app-botao (acionado)="buscar()">Buscar item</app-botao></div>@if(erro){
+        <p>Informe o número de série para consultar uma locação em aberto ou já devolvida.</p>
+        <div class="serial"><input [(ngModel)]="serie" [disabled]="processando" (ngModelChange)="limpar()" (keyup.enter)="buscar()"
+                placeholder="Ex.: DVD-2024-001"><app-botao [desabilitado]="processando" (acionado)="buscar()">Buscar item</app-botao></div>@if(erro){
         <p class="error">{{erro}}</p>}@if(concluida){<div class="success-box"><b>✓</b><span><strong>Devolução
                     registrada!</strong><small>O item já consta como disponível no acervo.</small></span></div>}
     </section>@if(locacao){<section class="card receipt">
         <div class="receipt-head">
             <div class="step">2</div><span>
-                <h2>Confira a devolução</h2>
-                <p>Dados da locação vigente</p>
-            </span><app-status [texto]="locacao.status" [tipo]="locacao.status==='Atrasada'?'erro':'sucesso'" />
+                <h2>{{locacao.status==='Devolvida'?'Devolução registrada':'Confira a devolução'}}</h2>
+                <p>{{locacao.status==='Devolvida'?'Dados da última locação devolvida':'Dados da locação vigente'}}</p>
+            </span><app-status [texto]="locacao.status" [tipo]="locacao.status==='Devolvida'?'neutro':locacao.status==='Atrasada'?'erro':'sucesso'" />
         </div>
         <div class="movie"><i>▶</i><span><strong>{{locacao.item}}</strong><small>{{locacao.serie}}</small></span></div>
         <dl>
@@ -26,18 +26,41 @@
                 <dd>{{locacao.data|date:'dd/MM/yyyy'}}</dd>
             </div>
             <div>
-                <dt>Devolução prevista</dt>
+                <dt>Prazo para devolução</dt>
                 <dd>{{locacao.prevista|date:'dd/MM/yyyy'}}</dd>
             </div>
             <div>
                 <dt>Devolução efetiva</dt>
-                <dd>Hoje</dd>
+                <dd>{{locacao.devolucao ? (locacao.devolucao|date:'dd/MM/yyyy') : 'Hoje'}}</dd>
             </div>
         </dl>
+        @if(locacao.status!=='Devolvida'){<p class="hint">A devolução deve ocorrer até o prazo definido pela classe. Cada dia excedente gera multa de R$ 2,00.</p>}
         <div class="values">
             <p><span>Valor da locação</span><b>{{locacao.paga?'Já pago':(locacao.valor|currency:'BRL')}}</b></p>
-            <p><span>Multa por atraso</span><b [class.fine]="locacao.multa">{{locacao.multa|currency:'BRL'}}</b></p>
-            <p class="total"><span>Total a pagar</span><b>{{total|currency:'BRL'}}</b></p>
-        </div><app-botao (acionado)="confirmar()">Confirmar devolução e pagamento</app-botao>
+            <p><span>Multa por atraso ({{locacao.diasAtraso}} dia(s), R$ 2,00/dia)</span><b [class.fine]="locacao.multa">{{locacao.multa|currency:'BRL'}}</b></p>
+            <p class="total"><span>{{locacao.status==='Devolvida'?'Saldo pendente':'Total a pagar'}}</span><b>{{total|currency:'BRL'}}</b></p>
+        </div>@if(locacao.status!=='Devolvida'){
+        <app-botao [desabilitado]="processando" (acionado)="confirmar()">Confirmar devolução e pagamento</app-botao>
+        }
     </section>}
 </div>
+<section class="card open-rentals">
+    <div class="toolbar"><h2>Locações em aberto</h2><span>{{abertas.length}} locações</span></div>
+    @if(erroLista){<p class="error" role="alert">{{erroLista}}</p><app-botao tipo="secundario" [desabilitado]="carregando" (acionado)="carregar()">Tentar novamente</app-botao>}
+    <div class="table-wrap"><table>
+        <thead><tr><th>Cliente</th><th>Item</th><th>Locação</th><th>Prazo de devolução</th><th>Multa</th><th>Total a pagar</th><th>Status</th><th class="actions">Ações</th></tr></thead>
+        <tbody>
+            @if(carregando){<tr><td colspan="8">Carregando locações...</td></tr>}
+            @else if(!erroLista){
+                @for(x of abertas;track x.id){<tr>
+                    <td><strong>{{x.cliente}}</strong><small class="block">Locação #{{x.id}}</small></td>
+                    <td>{{x.item}}<small class="block">{{x.serie}}</small></td>
+                    <td>{{x.data|date:'dd/MM/yyyy'}}</td><td>{{x.prevista|date:'dd/MM/yyyy'}}</td>
+                    <td>{{x.multa|currency:'BRL'}}</td><td>{{x.total|currency:'BRL'}}</td>
+                    <td><app-status [texto]="x.status" [tipo]="x.status==='Atrasada'?'erro':'sucesso'" /></td>
+                    <td class="actions"><app-botao tipo="secundario" [desabilitado]="processando" (acionado)="selecionar(x)">Devolver</app-botao></td>
+                </tr>} @empty {<tr><td colspan="8">Nenhuma locação em aberto.</td></tr>}
+            }
+        </tbody>
+    </table></div>
+</section>

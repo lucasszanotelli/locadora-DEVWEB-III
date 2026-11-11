@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.backend.model.domain.Titulo;
 
 public interface RepoTitulo extends JpaRepository<Titulo, Integer> {
+    java.util.Optional<Titulo> findByNomeIgnoreCase(String nome);
     boolean existsByNomeIgnoreCase(String nome);
     boolean existsByClasse(String classe);
     java.util.List<Titulo> findByClasse(String classe);

@@ -15,8 +15,10 @@ import com.backend.model.repository.RepoTitulo;
 public class ServItem {
     private final RepoItem repoItem;
     private final RepoTitulo repoTitulo;
+    private final com.backend.model.repository.RepoLocacao locacoes;
 
-    public ServItem(RepoItem repoItem, RepoTitulo repoTitulo) {
+    public ServItem(RepoItem repoItem, RepoTitulo repoTitulo, com.backend.model.repository.RepoLocacao locacoes) {
+        this.locacoes = locacoes;
         this.repoItem = repoItem;
         this.repoTitulo = repoTitulo;
     }
@@ -37,6 +39,11 @@ public class ServItem {
 
     public Optional<Item> atualizar(Integer serial, Item itemAtualizado) {
         return repoItem.findById(serial).map(item -> {
+            if (locacoes.existsByItemIdAndDevolucaoIsNullAndIdNot(serial, 0)
+                    && (!java.util.Objects.equals(item.getNumeroSerie(), itemAtualizado.getNumeroSerie())
+                        || !java.util.Objects.equals(item.getTitulo(), itemAtualizado.getTitulo())
+                        || !"Locado".equals(itemAtualizado.getStatus())))
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "O item possui locação vigente. Registre a devolução antes de alterar série, título ou status.");
             validar(itemAtualizado);
             item.setDataAquisicao(itemAtualizado.getDataAquisicao());
             item.setTipoItem(itemAtualizado.getTipoItem());
@@ -79,6 +86,8 @@ public class ServItem {
             return false;
         }
 
+        if (locacoes.existsByItemId(serial))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "O item possui locações e não pode ser excluído.");
         repoItem.deleteById(serial);
         return true;
     }

@@ -16,3 +16,6 @@ cd backend\demo .\mvnw.cmd spring-boot:run
 
 # Frontend - em outro terminal, a partir da raiz do repositorio
 cd frontend-angular npm start
+
+#No macOS:
+#cd backend/demo ./mvnw spring-boot:run

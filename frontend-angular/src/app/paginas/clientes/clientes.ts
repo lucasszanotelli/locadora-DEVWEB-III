@@ -1,10 +1,12 @@
-import { Component } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { finalize } from 'rxjs'
 import { CabecalhoPagina } from '../../componentes-genericos/cabecalho-pagina/cabecalho-pagina'
 import { Botao } from '../../componentes-genericos/botao/botao'
 import { Modal } from '../../componentes-genericos/modal/modal'
 import { Status } from '../../componentes-genericos/status/status'
 import { Cliente, LocadoraService } from '../../dados/locadora.service'
+import { ClienteService } from '../../dados/cliente.service'
 
 @Component({
   selector: 'app-clientes',
@@ -12,12 +14,25 @@ import { Cliente, LocadoraService } from '../../dados/locadora.service'
   imports: [FormsModule, CabecalhoPagina, Botao, Modal, Status],
   templateUrl: './clientes.html'
 })
-export class Clientes {
+export class Clientes implements OnInit {
+  private api = inject(ClienteService)
   busca = ''
   modal = false
   erro = ''
+  erroLista = ''
+  carregando = false
+  processando = false
   item = this.vazio()
   constructor (public dados: LocadoraService) {}
+  ngOnInit () { this.carregar() }
+  carregar () {
+    this.carregando = true
+    this.erroLista = ''
+    this.api.listar().pipe(finalize(() => this.carregando = false)).subscribe({
+      next: xs => this.dados.clientes.set(xs),
+      error: () => this.erroLista = 'Não foi possível carregar os clientes. Verifique se o backend está em execução.'
+    })
+  }
   vazio (): Cliente {
     return {
       id: 0,
@@ -51,6 +66,7 @@ export class Clientes {
     this.erro = ''
   }
   salvar () {
+    if (this.processando) return
     if (
       !this.item.nome ||
       !this.item.sexo ||
@@ -69,23 +85,39 @@ export class Clientes {
         return
       }
     }
-    this.dados.salvarCliente(this.item)
-    this.modal = false
+    const { id, inscricao, ...cliente } = this.item
+    const requisicao = id ? this.api.atualizar(id, cliente) : this.api.inserir(cliente)
+    this.processando = true
+    this.apiRequisicao(requisicao, salvo => {
+      const atual = this.dados.clientes()
+      this.dados.clientes.set(id ? atual.map(x => x.id === salvo.id ? salvo : x) : [...atual, salvo])
+      this.modal = false
+    })
   }
   alternar (x: Cliente) {
-    const ativo = !x.ativo
-    this.dados.clientes.update(xs =>
-      xs.map(y =>
-        y.id === x.id || (x.tipo === 'Sócio' && y.socioId === x.id) ? { ...y, ativo } : y
-      )
-    )
+    if (this.processando) return
+    this.processando = true
+    this.apiRequisicao(this.api.alternarStatus(x.id), salvo => {
+      this.dados.clientes.update(xs => xs.map(y => y.id === salvo.id || (salvo.tipo === 'Sócio' && y.socioId === salvo.id) ? { ...y, ativo: salvo.ativo } : y))
+    })
   }
   excluir (x: Cliente) {
     if (x.possuiLocacoes) {
       alert('O cliente possui locações e não pode ser excluído.')
       return
     }
-    if (confirm('Excluir este cliente, seus dependentes e reservas?'))
-      this.dados.clientes.update(xs => xs.filter(y => y.id !== x.id && y.socioId !== x.id))
+    if (this.processando || !confirm('Excluir este cliente e seus dependentes?')) return
+    this.processando = true
+    this.api.excluir(x.id).pipe(finalize(() => this.processando = false)).subscribe({
+      next: () => this.dados.clientes.update(xs => xs.filter(y => y.id !== x.id && y.socioId !== x.id)),
+      error: () => this.erroLista = 'Não foi possível excluir o cliente. Atualize a lista e tente novamente.'
+    })
+  }
+  private apiRequisicao (requisicao: ReturnType<ClienteService['inserir']>, sucesso: (cliente: Cliente) => void) {
+    this.erro = ''
+    requisicao.pipe(finalize(() => this.processando = false)).subscribe({
+      next: sucesso,
+      error: e => this.erro = e.status === 400 ? (e.error?.message || 'Confira os dados informados.') : 'Não foi possível salvar o cliente. Verifique a conexão com o backend.'
+    })
   }
 }

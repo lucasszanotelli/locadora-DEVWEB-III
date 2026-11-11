@@ -1,54 +1,46 @@
-<app-cabecalho-pagina titulo="Locações" subtitulo="Registre e acompanhe as locações da videolocadora."><app-botao
-        icone="＋" (acionado)="novo()">Nova locação</app-botao></app-cabecalho-pagina>
+<app-cabecalho-pagina titulo="Locações" subtitulo="Registre e acompanhe as locações da videolocadora.">
+  <app-botao icone="＋" [desabilitado]="carregando || processando" (acionado)="novo()">Nova locação</app-botao>
+</app-cabecalho-pagina>
+@if(erroLista){<p class="error" role="alert">{{erroLista}}</p><app-botao tipo="secundario" (acionado)="carregar()">Tentar novamente</app-botao>}
 <section class="card">
-    <div class="toolbar">
-        <div class="search">⌕<input [(ngModel)]="busca" placeholder="Buscar cliente, título ou série..."></div>
-        <span>{{lista.length}} locações</span>
-    </div>
-    <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th>Cliente</th>
-                    <th>Item</th>
-                    <th>Locação</th>
-                    <th>Devolução prevista</th>
-                    <th>Valor</th>
-                    <th>Status</th>
-                    <th class="actions">Ações</th>
-                </tr>
-            </thead>
-            <tbody>@for(x of lista;track x.id){<tr>
-                    <td><strong>{{x.cliente}}</strong></td>
-                    <td>{{x.item}}<small class="block">{{x.serie}}</small></td>
-                    <td>{{x.data|date:'dd/MM/yyyy'}}</td>
-                    <td>{{x.prevista|date:'dd/MM/yyyy'}}</td>
-                    <td>{{x.valor|currency:'BRL'}}</td>
-                    <td><app-status [texto]="x.status"
-                            [tipo]="x.status==='Atrasada'?'erro':x.status==='Devolvida'?'neutro':'sucesso'" /></td>
-                    <td class="actions"><app-botao tipo="icone" icone="✎" (acionado)="editar(x)" /><app-botao
-                            tipo="icone" icone="×" (acionado)="cancelar(x)" /></td>
-                </tr>}</tbody>
-        </table>
-    </div>
-</section><app-modal [aberto]="modal" [titulo]="item.id?'Alterar locação':'Nova locação'" largura="700px"
-    (fechar)="modal=false">
-    <div class="form-grid"><label class="full">Cliente *<select [(ngModel)]="item.cliente">
-                <option value="">Selecione um cliente ativo</option>@for(x of dados.clientes();track x.id){@if(x.ativo){
-                <option>{{x.nome}}</option>}}
-            </select><small class="hint">Clientes em débito devem ser bloqueados pela API.</small></label><label
-            class="full">Item disponível *<select [ngModel]="item.serie" (ngModelChange)="selecionarItem($event)">
-                <option value="">Selecione por título e número de série</option>@for(x of dados.itens();track
-                x.id){@if(x.status==='Disponível'||x.serie===item.serie){<option [value]="x.serie">{{x.titulo}} —
-                    {{x.serie}} ({{x.tipo}})</option>}}
-            </select></label><label>Data da locação *<input type="date" [(ngModel)]="item.data"></label><label>Devolução
-            prevista *<input type="date" [(ngModel)]="item.prevista"></label><label>Valor da locação *<input
-                type="number" step="0.01" [(ngModel)]="item.valor"></label><label class="checkline"><input
-                type="checkbox" [(ngModel)]="item.paga"> Pagamento realizado</label>@if(erro){<p class="error full">
-            {{erro}}</p>}<div class="summary full"><span>Valor calculado pela
-                classe</span><strong>{{item.valor|currency:'BRL'}}</strong></div>
-        <div class="modal-actions full"><app-botao tipo="secundario"
-                (acionado)="modal=false">Cancelar</app-botao><app-botao (acionado)="salvar()">Confirmar
-                locação</app-botao></div>
-    </div>
+  <div class="toolbar"><div class="search">⌕<input [(ngModel)]="busca" placeholder="Buscar cliente, título ou série..."></div><span>{{lista.length}} locações</span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Cliente</th><th>Item</th><th>Locação</th><th>Devolução prevista</th><th>Devolução efetiva</th><th>Valor</th><th>Multa</th><th>Pagamento</th><th>Status</th><th class="actions">Ações</th></tr></thead>
+    <tbody>
+      @if(carregando){<tr><td colspan="10">Carregando locações...</td></tr>}
+      @else { @for(x of lista; track x.id){<tr>
+        <td><strong>{{x.cliente}}</strong><small class="block">Locação #{{x.id}}</small></td>
+        <td>{{x.item}}<small class="block">{{x.serie}}</small></td>
+        <td>{{x.data|date:'dd/MM/yyyy'}}</td><td>{{x.prevista|date:'dd/MM/yyyy'}}</td>
+        <td>{{x.devolucao ? (x.devolucao|date:'dd/MM/yyyy') : '—'}}</td>
+        <td>{{x.valor|currency:'BRL'}}</td><td>{{x.multa|currency:'BRL'}}</td><td>{{x.paga?'Pago':'Pendente'}}</td>
+        <td><app-status [texto]="x.status" [tipo]="x.status==='Atrasada'?'erro':x.status==='Devolvida'?'neutro':'sucesso'" /></td>
+        <td class="actions">@if(x.status!=='Devolvida'){
+          <app-botao tipo="icone" icone="✎" [desabilitado]="processando" (acionado)="editar(x)" />
+          @if(!x.paga){<app-botao tipo="icone" icone="×" [desabilitado]="processando" (acionado)="cancelar(x)" />}
+        }</td>
+      </tr>} @empty {<tr><td colspan="10">Nenhuma locação encontrada.</td></tr>} }
+    </tbody>
+  </table></div>
+</section>
+<app-modal [aberto]="modal" [titulo]="item.id?'Alterar locação':'Nova locação'" largura="700px" (fechar)="fechar()">
+  <fieldset class="form-grid" [disabled]="processando || carregando" style="border:0;padding:0;margin:0;min-width:0">
+    <label class="full">Cliente *<select [(ngModel)]="item.clienteId" [disabled]="pagamentoRegistrado">
+      <option [ngValue]="0">Selecione um cliente ativo</option>
+      @for(x of dados.clientes();track x.id){@if(x.ativo || x.id===item.clienteId){<option [ngValue]="x.id">{{x.nome}} — {{x.inscricao}}</option>}}
+    </select></label>
+    <label class="full">Item disponível *<select [ngModel]="item.itemId" (ngModelChange)="selecionarItem($event)" [disabled]="pagamentoRegistrado">
+      <option [ngValue]="0">Selecione por título e número de série</option>
+      @for(x of dados.itens();track x.id){<option [ngValue]="x.id" [disabled]="x.status!=='Disponível' && x.id!==item.itemId">{{x.titulo}} — {{x.serie}} ({{x.tipo}}){{disponibilidade(x.id)}}</option>}
+    </select><small class="hint">Somente itens disponíveis podem ser locados.</small></label>
+    <label>Data da locação<input type="date" [ngModel]="item.data" disabled></label>
+    <label>Devolução prevista (prazo da classe)<input type="date" [ngModel]="item.prevista" disabled></label>
+    <label>Valor da locação *<input type="number" min="0.01" step="0.01" [(ngModel)]="item.valor" [disabled]="pagamentoRegistrado"></label>
+    <label class="checkline"><input type="checkbox" [(ngModel)]="item.paga" [disabled]="pagamentoRegistrado"> Pagamento realizado</label>
+    <p class="hint full">A devolução deve ocorrer até a data definida pelo prazo da classe. Após essa data, será cobrada multa de R$ 2,00 por dia de atraso.</p>
+    @if(erro){<p class="error full" role="alert">{{erro}}</p>}
+    <div class="summary full"><span>Valor da locação</span><strong>{{item.valor|currency:'BRL'}}</strong></div>
+  </fieldset>
+  <div class="modal-actions"><app-botao tipo="secundario" [desabilitado]="processando" (acionado)="fechar()">Cancelar</app-botao>
+    <app-botao [desabilitado]="processando || carregando" (acionado)="salvar()">{{processando?'Salvando...':'Confirmar locação'}}</app-botao></div>
 </app-modal>
