@@ -2,16 +2,19 @@ package com.backend.model.service;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
 import com.backend.model.domain.Classe;
 import com.backend.model.repository.RepoClasse;
 import com.backend.model.repository.RepoTitulo;
 
 @Service
 public class ServClasse {
+
     private final RepoClasse classes;
     private final RepoTitulo titulos;
 
@@ -20,8 +23,13 @@ public class ServClasse {
         this.titulos = titulos;
     }
 
-    public List<Classe> listarTodos() { return classes.findAll(); }
-    public Optional<Classe> buscarPorId(Integer id) { return classes.findById(id); }
+    public List<Classe> listarTodos() {
+        return classes.findAll();
+    }
+
+    public Optional<Classe> buscarPorId(Integer id) {
+        return classes.findById(id);
+    }
 
     @Transactional
     public Classe salvar(Classe classe) {
@@ -60,7 +68,9 @@ public class ServClasse {
     @Transactional
     public boolean excluir(Integer id) {
         var classe = classes.findById(id);
-        if (classe.isEmpty()) return false;
+        if (classe.isEmpty()) {
+            return false;
+        }
         if (titulos.existsByClasse(classe.get().getNome())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Classe associada a títulos. A exclusão não é permitida.");
         }

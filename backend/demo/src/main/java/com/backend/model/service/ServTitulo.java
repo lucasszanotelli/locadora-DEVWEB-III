@@ -12,12 +12,20 @@ import com.backend.model.repository.RepoTitulo;
 
 @Service
 public class ServTitulo {
+
     private final RepoTitulo repoTitulo;
 
-    public ServTitulo(RepoTitulo repoTitulo) { this.repoTitulo = repoTitulo; }
+    public ServTitulo(RepoTitulo repoTitulo) {
+        this.repoTitulo = repoTitulo;
+    }
 
-    public List<Titulo> listarTodos() { return repoTitulo.findAll(); }
-    public Optional<Titulo> buscarPorId(Integer id) { return repoTitulo.findById(id); }
+    public List<Titulo> listarTodos() {
+        return repoTitulo.findAll();
+    }
+
+    public Optional<Titulo> buscarPorId(Integer id) {
+        return repoTitulo.findById(id);
+    }
 
     public Titulo salvar(Titulo titulo) {
         validar(titulo);
@@ -53,11 +61,15 @@ public class ServTitulo {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O ano do título é inválido.");
         }
         titulo.setNome(titulo.getNome().trim());
-        if (titulo.getAtores() == null) titulo.setAtores(List.of());
+        if (titulo.getAtores() == null) {
+            titulo.setAtores(List.of());
+        }
     }
 
     public boolean excluir(Integer id) {
-        if (!repoTitulo.existsById(id)) return false;
+        if (!repoTitulo.existsById(id)) {
+            return false;
+        }
         repoTitulo.deleteById(id);
         return true;
     }

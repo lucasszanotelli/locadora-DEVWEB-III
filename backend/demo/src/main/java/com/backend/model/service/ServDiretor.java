@@ -14,6 +14,7 @@ import com.backend.model.repository.RepoDiretor;
 
 @Service
 public class ServDiretor {
+
     private final RepoDiretor repoDiretor;
 
     public ServDiretor(RepoDiretor repoDiretor) {

@@ -1,14 +1,14 @@
 package com.backend.model.service;
 
-import java.util.List;
-import java.util.Optional;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.Optional;
 
-import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
-import com.backend.excecoes.ExcecaoAtor;
+import org.springframework.stereotype.Service;
 
+import com.backend.excecoes.ExcecaoAtor;
 import com.backend.model.domain.Ator;
 import com.backend.model.repository.RepoAtor;
 
@@ -58,7 +58,9 @@ public class ServAtor {
             throw new ExcecaoAtor(HttpStatus.BAD_REQUEST, "A data de nascimento é obrigatória.");
         }
         try {
-            if (!nascimento.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) throw new DateTimeParseException("Formato inválido", nascimento, 0);
+            if (!nascimento.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
+                throw new DateTimeParseException("Formato inválido", nascimento, 0);
+            }
             LocalDate data = LocalDate.parse(nascimento);
             if (data.getYear() < 1 || data.isAfter(LocalDate.now())) {
                 throw new ExcecaoAtor(HttpStatus.BAD_REQUEST, "A data de nascimento deve ser válida e não pode estar no futuro.");
